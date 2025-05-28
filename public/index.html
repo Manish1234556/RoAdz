@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoAdz - Vehicle Poster Advertising</title>
+    <link rel="icon" href="./logo.png" type="image/png" class="rounded-full">
+    <!-- Use a minified Tailwind CSS file from unpkg.com for production -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome for social media and hamburger icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Hero Section with Parallax */
+        .hero-bg {
+            background-image: url('https://static.wixstatic.com/media/3349e6_5bccdf78437d411282a155cf43dcc3e2~mv2.jpg/v1/fill/w_1350,h_900,fp_0.50_0.50,q_80,enc_auto/3349e6_5bccdf78437d411282a155cf43dcc3e2~mv2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: #1f2937; /* Fallback color */
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Services Section */
+        .autorickshaw-bg {
+            background-image: url('https://static.wixstatic.com/media/3349e6_22496d2cc97747a78850b73a8eb2d8ff~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_22496d2cc97747a78850b73a8eb2d8ff~mv2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            background-blend-mode: lighten;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bus-bg {
+            background-image: url('https://static.wixstatic.com/media/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            background-blend-mode: lighten;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .custom-bg {
+            background-image: url('https://static.wixstatic.com/media/3349e6_616939a190024201a7ff450862e90b81~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_616939a190024201a7ff450862e90b81~mv2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            background-blend-mode: lighten;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            transition: background 0.5s ease;
+        }
+        .service-card:hover::before {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .service-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        .service-card:hover .card-content h3,
+        .service-card:hover .card-content p {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        .service-card:hover .autorickshaw-bg,
+        .service-card:hover .bus-bg,
+        .service-card:hover .custom-bg {
+            transform: scale(1.1);
+            transition: transform 0.5s ease;
+        }
+        .card-content {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* About Section with Parallax */
+        #about {
+            background-image: url('https://static.wixstatic.com/media/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg/v1/fill/w_1350,h_600,fp_0.50_0.50,q_80,enc_auto/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        #about .overlay {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 0.5rem;
+        }
+
+        /* Portfolio Section with Reveal Animation */
+        .portfolio-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .portfolio-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Visitors Section */
+        #visitors {
+            background-color: #f9fafb;
+        }
+        .counter {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        /* Navbar Media Query */
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: #1f2937; /* gray-900 */
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 20;
+            }
+            .mobile-menu.active {
+                display: flex;
+            }
+            .mobile-menu a {
+                font-size: 1.5rem;
+                margin: 1rem 0;
+            }
+            .close-menu {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* Validation Error Style */
+        .error {
+            border-color: #ef4444; /* red-500 */
+        }
+        .error-message {
+            color: #ef4444; /* red-500 */
+            font-size: 0.875rem; /* text-sm */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-gray-900 text-white p-4 sticky top-0 z-30">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="./logo.png" alt="RoAdz Logo" class="navbar-logo h-12 rounded-full">
+                <h1 class="text-2xl font-bold ">RoAdz</h1>
+            </div>
+            <button class="hamburger text-2xl md:hidden focus:outline-none" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="mobile-menu hidden md:flex md:space-x-4">
+                <a href="#home" class="hover:text-yellow-400">Home</a>
+                <a href="#services" class="hover:text-yellow-400">Services</a>
+                <a href="#portfolio" class="hover:text-yellow-400">Portfolio</a>
+                <a href="#about" class="hover:text-yellow-400">About</a>
+                <a href="#contact" class="hover:text-yellow-400">Contact</a>
+                <a href="#visitors" class="hover:text-yellow-400">Visitors</a>
+                <button class="close-menu md:hidden text-2xl focus:outline-none" aria-label="Close menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg flex items-center justify-center text-white">
+        <div class="container mx-auto text-center px-4">
+            <h2 class="text-4xl md:text-6xl font-bold mb-4">Drive Your Brand Forward</h2>
+            <p class="text-xl md:text-2xl mb-6">Advertise on autorickshaws, buses, and more!</p>
+            <a href="#contact" class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md autorickshaw-bg service-card">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-4">Autorickshaw Advertising</h3>
+                        <p>High-visibility posters on autorickshaws for local reach in busy urban areas.</p>
+                        <p class="mt-4 font-bold">Price: ₹150 per unit</p>
+                        <button class="mt-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-500" onclick="openBookingModal('Autorickshaw Advertising')">Book Now</button>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md bus-bg service-card">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-4">Bus Advertising</h3>
+                        <p>Large-format ads on buses for maximum exposure across cities.</p>
+                        <p class="mt-4 font-bold">Price: ₹300 per unit</p>
+                        <button class="mt-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-500" onclick="openBookingModal('Bus Advertising')">Book Now</button>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md custom-bg service-card">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-4">Custom Vehicle Ads</h3>
+                        <p>Tailored advertising solutions on taxis, vans, and other vehicles.</p>
+                        <p class="mt-4 font-bold">Price: ₹500 per unit</p>
+                        <button class="mt-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-500" onclick="openBookingModal('Custom Vehicle Ads')">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for Booking Form -->
+    <div id="bookingModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+            <h3 class="text-lg font-semibold mb-4">Book Your Advertising Service</h3>
+            <form id="bookingForm">
+                <div class="mb-4">
+                    <label for="bookingName" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" id="bookingName" name="name" class="mt-1 p-2 w-full border rounded-md" required>
+                    <p id="bookingNameError" class="error-message hidden">Name is required.</p>
+                </div>
+                <div class="mb-4">
+                    <label for="bookingEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="bookingEmail" name="email" class="mt-1 p-2 w-full border rounded-md" required>
+                    <p id="bookingEmailError" class="error-message hidden">A valid email is required.</p>
+                </div>
+                <div class="mb-4">
+                    <label for="bookingService" class="block text-sm font-medium text-gray-700">Service</label>
+                    <input type="text" id="bookingService" name="service" class="mt-1 p-2 w-full border rounded-md" readonly>
+                </div>
+                <div class="mb-4">
+                    <label for="bookingUnits" class="block text-sm font-medium text-gray-700">Number of Units</label>
+                    <input type="number" id="bookingUnits" name="units" class="mt-1 p-2 w-full border rounded-md" min="1" required>
+                    <p id="bookingUnitsError" class="error-message hidden">Units must be at least 1.</p>
+                    <p id="totalCost" class="mt-2 text-sm font-medium text-gray-700">Total Cost: ₹0</p>
+                </div>
+                <div class="mb-4">
+                    <label for="bookingMessage" class="block text-sm font-medium text-gray-700">Message</label>
+                    <textarea id="bookingMessage" name="message" class="mt-1 p-2 w-full border rounded-md" rows="4" required></textarea>
+                    <p id="bookingMessageError" class="error-message hidden">Message is required.</p>
+                </div>
+                <button type="button" id="submitBooking" class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500">Submit Booking</button>
+            </form>
+            <p id="bookingMessage" class="mt-4 text-green-600 hidden"></p>
+            <button class="mt-4 text-gray-600 underline" onclick="closeBookingModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Portfolio</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden portfolio-item">
+                    <img src="https://static.wixstatic.com/media/3349e6_22496d2cc97747a78850b73a8eb2d8ff~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_22496d2cc97747a78850b73a8eb2d8ff~mv2.jpg" alt="Autorickshaw Ad" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Local Cafe Campaign</h3>
+                        <p>Vibrant autorickshaw ads for a local cafe, boosting foot traffic by 30%.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md overflow-hidden portfolio-item">
+                    <img src="https://static.wixstatic.com/media/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg" alt="Bus Ad" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">City Bus Branding</h3>
+                        <p>Full-bus wrap for a tech startup, increasing brand visibility across Mumbai.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md overflow-hidden portfolio-item">
+                    <img src="https://static.wixstatic.com/media/3349e6_616939a190024201a7ff450862e90b81~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_616939a190024201a7ff450862e90b81~mv2.jpg" alt="Taxi Ad" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Taxi Ad Blitz</h3>
+                        <p>Targeted taxi ads for a retail chain, driving in-store visits.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">About RoAdz</h2>
+            <div class="overlay max-w-2xl mx-auto">
+                <p class="text-lg text-center">RoAdz, a Prayagraj-based marketing agency, specializes in innovative advertising strategies on auto rickshaws and buses. With a focus on promoting businesses through strategically placed posters, RoAdz has a proven track record of serving over 200 companies utilizing a network of more than 1000 vehicles. Our goal is to attract companies seeking effective advertising solutions for auto rickshaws and buses while delivering unparalleled service and impactful results.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
+            <div class="max-w-lg mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p class="text-lg mb-4">Interested in advertising with us? Reach out!</p>
+                    <form id="contactForm">
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" class="mt-1 p-2 w-full border rounded-md" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" class="mt-1 p-2 w-full border rounded-md" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                            <textarea id="message" name="message" class="mt-1 p-2 w-full border rounded-md" rows="4" required></textarea>
+                        </div>
+                        <button type="button" id="submitContact" class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500">Send Message</button>
+                    </form>
+                    <p id="formMessage" class="mt-4 text-green-600 hidden"></p>
+                    <p class="mt-4"><strong>Email:</strong> info@roadz.com</p>
+                    <p class="mb-2"><strong>Phone:</strong> +91 123-456-7890</p>
+                    <p class="mb-4"><strong>Address:</strong> 123 Ad Street, Prayagraj, India</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visitors Section -->
+    <section id="visitors" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8">Our Reach</h2>
+            <p class="text-lg mb-4">Join the thousands who trust RoAdz for their advertising needs!</p>
+            <div class="counter" id="visitorCounter">0</div>
+            <p class="text-xl font-semibold mt-4">Visitors and Counting!</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 RoAdz. All rights reserved.</p>
+            <div class="mt-4 flex justify-center space-x-4">
+                <a href="https://www.linkedin.com/in/manish-kumar-53b589298/" target="_blank" class="text-white hover:text-yellow-400" aria-label="Follow RoAdz on LinkedIn">
+                    <i class="fab fa-linkedin fa-lg"></i>
+                </a>
+                <a href="https://instagram.com/roadz" target="_blank" class="text-white hover:text-yellow-400" aria-label="Follow RoAdz on Instagram">
+                    <i class="fab fa-instagram fa-lg"></i>
+                </a>
+                <a href="https://twitter.com/roadz" target="_blank" class="text-white hover:text-yellow-400" aria-label="Follow RoAdz on Twitter">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+                <a href="https://facebook.com/roadz" target="_blank" class="text-white hover:text-yellow-400" aria-label="Follow RoAdz on Facebook">
+                    <i class="fab fa-facebook fa-lg"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu after clicking a link
+                const mobileMenu = document.querySelector('.mobile-menu');
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // Toggle mobile menu
+        const hamburger = document.querySelector('.hamburger');
+        const closeMenu = document.querySelector('.close-menu');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        // Parallax effect for Hero and About sections
+        window.addEventListener('scroll', function () {
+            const heroSection = document.querySelector('.hero-bg');
+            const aboutSection = document.querySelector('#about');
+            const scrollPosition = window.pageYOffset;
+
+            // Parallax for Hero
+            const heroOffset = heroSection.offsetTop;
+            const heroParallax = (scrollPosition - heroOffset) * 0.5;
+            heroSection.style.backgroundPositionY = `${-heroParallax}px`;
+
+            // Parallax for About
+            const aboutOffset = aboutSection.offsetTop;
+            const aboutParallax = (scrollPosition - aboutOffset) * 0.3;
+            aboutSection.style.backgroundPositionY = `${-aboutParallax}px`;
+        });
+
+        // Check if hero background image loads
+        const heroSection = document.querySelector('.hero-bg');
+        const heroBgImage = new Image();
+        heroBgImage.src = 'https://static.wixstatic.com/media/3349e6_5bccdf78437d411282a155cf43dcc3e2~mv2.jpg/v1/fill/w_1350,h_900,fp_0.50_0.50,q_80,enc_auto/3349e6_5bccdf78437d411282a155cf43dcc3e2~mv2.jpg';
+        heroBgImage.onload = () => console.log('Hero background image loaded successfully');
+        heroBgImage.onerror = () => {
+            console.error('Failed to load hero background image');
+            heroSection.style.backgroundImage = 'none';
+        };
+
+        // Check if service background images load
+        const serviceImages = [
+            { selector: '.autorickshaw-bg', url: 'https://static.wixstatic.com/media/3349e6_22496d2cc97747a78850b73a8eb2d8ff~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_22496d2cc97747a78850b73a8eb2d8ff~mv2.jpg' },
+            { selector: '.bus-bg', url: 'https://static.wixstatic.com/media/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg' },
+            { selector: '.custom-bg', url: 'https://static.wixstatic.com/media/3349e6_616939a190024201a7ff450862e90b81~mv2.jpg/v1/fill/w_720,h_385,fp_0.50_0.50,q_80,enc_auto/3349e6_616939a190024201a7ff450862e90b81~mv2.jpg' }
+        ];
+        serviceImages.forEach(({ selector, url }) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => console.log(`${selector} background image loaded successfully`);
+            img.onerror = () => {
+                console.error(`Failed to load ${selector} background image`);
+                document.querySelector(selector).style.backgroundImage = 'none';
+            };
+        });
+
+        // Check if About section background image loads
+        const aboutSection = document.querySelector('#about');
+        const aboutBgImage = new Image();
+        aboutBgImage.src = 'https://static.wixstatic.com/media/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg/v1/fill/w_1350,h_600,fp_0.50_0.50,q_80,enc_auto/3349e6_460ea10b827046e9947a092db29e3796~mv2.jpg';
+        aboutBgImage.onload = () => console.log('About background image loaded successfully');
+        aboutBgImage.onerror = () => {
+            console.error('Failed to load About background image');
+            aboutSection.style.backgroundImage = 'none';
+        };
+
+        // Reveal animation for Portfolio items
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        const observerOptions = {
+            root: null,
+            threshold: 0.1
+        };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        portfolioItems.forEach(item => observer.observe(item));
+
+        // Modal functionality for booking
+        const bookingModal = document.getElementById('bookingModal');
+        const bookingServiceInput = document.getElementById('bookingService');
+        const bookingUnitsInput = document.getElementById('bookingUnits');
+        const totalCostDisplay = document.getElementById('totalCost');
+
+        const pricing = {
+            'Autorickshaw Advertising': 150,
+            'Bus Advertising': 300,
+            'Custom Vehicle Ads': 500
+        };
+
+        function updateTotalCost() {
+            const service = bookingServiceInput.value;
+            const units = parseInt(bookingUnitsInput.value) || 0;
+            const pricePerUnit = pricing[service] || 0;
+            const total = units * pricePerUnit;
+            totalCostDisplay.textContent = `Total Cost: ₹${total.toLocaleString()}`;
+        }
+
+        function openBookingModal(service) {
+            bookingServiceInput.value = service;
+            updateTotalCost();
+            bookingModal.classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            bookingModal.classList.add('hidden');
+            // Reset the form and message when closing
+            bookingForm.reset();
+            bookingMessage.classList.add('hidden');
+            bookingMessage.textContent = '';
+            totalCostDisplay.textContent = 'Total Cost: ₹0';
+            // Reset validation styles
+            document.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+            document.querySelectorAll('.error-message').forEach(msg => msg.classList.add('hidden'));
+        }
+
+        // Update total cost when units change
+        bookingUnitsInput.addEventListener('input', updateTotalCost);
+
+        // Close modal on outside click
+        bookingModal.addEventListener('click', (e) => {
+            if (e.target === bookingModal) closeBookingModal();
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !bookingModal.classList.contains('hidden')) {
+                closeBookingModal();
+            }
+        });
+
+        // Booking form submission
+        const bookingForm = document.getElementById('bookingForm');
+        const submitBooking = document.getElementById('submitBooking');
+        const bookingMessage = document.getElementById('bookingMessage');
+
+        // Debugging: Verify DOM elements
+        console.log('bookingForm:', bookingForm);
+        console.log('submitBooking:', submitBooking);
+        console.log('bookingMessage:', bookingMessage);
+
+        if (!bookingForm || !submitBooking || !bookingMessage) {
+            console.error('One or more booking form elements are missing');
+        }
+
+        submitBooking.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const nameInput = document.getElementById('bookingName');
+            const emailInput = document.getElementById('bookingEmail');
+            const service = bookingServiceInput.value;
+            const unitsInput = document.getElementById('bookingUnits');
+            const messageInput = document.getElementById('bookingMessage');
+
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const units = parseInt(unitsInput.value);
+            const message = messageInput.value.trim();
+
+            // Reset previous validation states
+            document.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+            document.querySelectorAll('.error-message').forEach(msg => msg.classList.add('hidden'));
+
+            let hasError = false;
+
+            // Validate fields
+            if (!name) {
+                nameInput.classList.add('error');
+                document.getElementById('bookingNameError').classList.remove('hidden');
+                hasError = true;
+            }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailInput.classList.add('error');
+                document.getElementById('bookingEmailError').classList.remove('hidden');
+                hasError = true;
+            }
+            if (!units || units < 1) {
+                unitsInput.classList.add('error');
+                document.getElementById('bookingUnitsError').classList.remove('hidden');
+                hasError = true;
+            }
+            if (!message) {
+                messageInput.classList.add('error');
+                document.getElementById('bookingMessageError').classList.remove('hidden');
+                hasError = true;
+            }
+            if (!service) {
+                bookingMessage.textContent = 'Service is missing. Please try again.';
+                bookingMessage.classList.remove('text-green-600', 'hidden');
+                bookingMessage.classList.add('text-red-600');
+                return;
+            }
+
+            if (hasError) {
+                bookingMessage.textContent = 'Please correct the errors above.';
+                bookingMessage.classList.remove('text-green-600', 'hidden');
+                bookingMessage.classList.add('text-red-600');
+                return;
+            }
+
+            try {
+                // Disable the submit button during submission
+                submitBooking.disabled = true;
+                submitBooking.textContent = 'Submitting...';
+                bookingMessage.textContent = 'Submitting...';
+                bookingMessage.classList.remove('text-green-600', 'text-red-600', 'hidden');
+
+                const response = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, service, units, message })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    bookingMessage.textContent = result.message;
+                    bookingMessage.classList.remove('text-red-600', 'hidden');
+                    bookingMessage.classList.add('text-green-600');
+                    bookingForm.reset();
+                    bookingServiceInput.value = '';
+                    totalCostDisplay.textContent = 'Total Cost: ₹0';
+                } else {
+                    throw new Error(result.error || 'Request failed');
+                }
+            } catch (error) {
+                console.error('Booking Submission Error:', error);
+                bookingMessage.textContent = 'Error submitting booking. Please try again.';
+                bookingMessage.classList.remove('text-green-600', 'hidden');
+                bookingMessage.classList.add('text-red-600');
+            } finally {
+                // Re-enable the submit button
+                submitBooking.disabled = false;
+                submitBooking.textContent = 'Submit Booking';
+            }
+        });
+
+        // Contact form submission
+        const contactForm = document.getElementById('contactForm');
+        const submitButton = document.getElementById('submitContact');
+        const formMessage = document.getElementById('formMessage');
+
+        // Debugging: Verify DOM elements
+        console.log('contactForm:', contactForm);
+        console.log('submitButton:', submitButton);
+        console.log('formMessage:', formMessage);
+
+        if (!contactForm || !submitButton || !formMessage) {
+            console.error('One or more form elements are missing');
+        }
+
+        submitButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !email || !message) {
+                formMessage.textContent = 'Please fill out all fields.';
+                formMessage.classList.remove('text-green-600', 'hidden');
+                formMessage.classList.add('text-red-600');
+                return;
+            }
+
+            try {
+                formMessage.textContent = 'Submitting...';
+                formMessage.classList.remove('text-green-600', 'text-red-600', 'hidden');
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, message })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    formMessage.textContent = result.message;
+                    formMessage.classList.remove('text-red-600', 'hidden');
+                    formMessage.classList.add('text-green-600');
+                    contactForm.reset();
+                } else {
+                    throw new Error(result.error || 'Request failed');
+                }
+            } catch (error) {
+                console.error('Form Submission Error:', error);
+                formMessage.textContent = 'Error submitting form. Please try again.';
+                formMessage.classList.remove('text-green-600', 'hidden');
+                formMessage.classList.add('text-red-600');
+            }
+        });
+
+        // Visitor counter
+        const visitorCounter = document.getElementById('visitorCounter');
+        let hasIncremented = false;
+        const visitorSection = document.getElementById('visitors');
+
+        async function fetchVisitorCount() {
+            try {
+                const response = await fetch('/api/visitors');
+                const data = await response.json();
+                if (response.ok) {
+                    visitorCounter.textContent = data.count.toLocaleString();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error fetching visitor count:', error);
+                visitorCounter.textContent = 'Error';
+            }
+        }
+
+        async function incrementVisitorCount() {
+            try {
+                const response = await fetch('/api/visitors', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                console.log('Response from POST /api/visitors:', data);
+                if (response.ok) {
+                    if (typeof data.count !== 'number') {
+                        throw new Error('Invalid count value returned');
+                    }
+                    visitorCounter.textContent = data.count.toLocaleString();
+                } else {
+                    throw new Error(data.error || 'Request failed');
+                }
+            } catch (error) {
+                console.error('Error incrementing visitor count:', error);
+                visitorCounter.textContent = 'Error';
+            }
+        }
+
+        const counterObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasIncremented) {
+                    fetchVisitorCount();
+                    incrementVisitorCount();
+                    hasIncremented = true;
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        counterObserver.observe(visitorSection);
+    </script>
+</body>
+</html>
