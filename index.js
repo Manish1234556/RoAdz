@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./db");
+require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -83,7 +83,6 @@ app.post("/api/bookings", async (req, res) => {
       .json({ error: "All fields are required and units must be at least 1" });
   }
   try {
-    // Use db.getCollection instead of db.collection for consistency
     const bookingsCollection = await db.getCollection("bookings");
     console.log("Attempting to save booking:", {
       name,
@@ -115,21 +114,25 @@ app.post("/api/bookings", async (req, res) => {
 // Serve static files after API routes
 app.use(express.static("public"));
 
-// Start the server after connecting to the database
-async function startServer() {
-  try {
-    await db.connect();
-    await initializeVisitorCount();
-    // Log available collections for debugging
-    const collections = await db.getCollectionNames();
-    console.log("Available collections:", collections);
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.error("Failed to start server:", error);
-    process.exit(1);
+// Start the server after connecting to the database (for local development)
+if (process.env.NODE_ENV !== "production") {
+  async function startServer() {
+    try {
+      await db.connect();
+      await initializeVisitorCount();
+      const collections = await db.getCollectionNames();
+      console.log("Available collections:", collections);
+      const PORT = process.env.PORT || 5000;
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    } catch (error) {
+      console.error("Failed to start server:", error);
+      process.exit(1);
+    }
   }
+  startServer();
 }
 
-startServer();
+// Export the app for Vercel
+module.exports = app;
