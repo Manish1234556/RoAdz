@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7MKC9ZGVS6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      // Set default consent mode (deny by default for GDPR compliance)
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied',
+        'region': ['EEA']
+      });
+
+      gtag('js', new Date());
+      gtag('config', 'G-7MKC9ZGVS6');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoAdz - Vehicle Poster Advertising</title>
@@ -370,7 +386,35 @@
         </div>
     </footer>
 
+    <!-- Consent Banner -->
+    <div id="consent-banner" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full text-center">
+            <p class="text-lg mb-4">We use cookies to improve your experience and for analytics.</p>
+            <button onclick="grantConsent()" class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500 mr-4">Accept</button>
+            <button onclick="denyConsent()" class="bg-gray-300 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-400">Decline</button>
+        </div>
+    </div>
+
     <script>
+        // Consent banner logic
+        if (!localStorage.getItem('consent')) {
+            document.getElementById('consent-banner').classList.remove('hidden');
+        }
+
+        function grantConsent() {
+            gtag('consent', 'update', {
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted'
+            });
+            localStorage.setItem('consent', 'granted');
+            document.getElementById('consent-banner').classList.add('hidden');
+        }
+
+        function denyConsent() {
+            localStorage.setItem('consent', 'denied');
+            document.getElementById('consent-banner').classList.add('hidden');
+        }
+
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
