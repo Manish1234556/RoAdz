@@ -178,6 +178,83 @@
             font-size: 0.875rem; /* text-sm */
             margin-top: 0.25rem; /* mt-1 */
         }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 40;
+        }
+        .chatbot-button {
+            background-color: #f59e0b; /* yellow-500 */
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .chatbot-window {
+            display: none;
+            width: 320px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex-direction: column;
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+        }
+        .chatbot-header {
+            background-color: #1f2937; /* gray-900 */
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chatbot-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #f9fafb; /* gray-50 */
+        }
+        .chatbot-footer {
+            padding: 10px;
+            border-top: 1px solid #e5e7eb; /* gray-200 */
+        }
+        .chatbot-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 5px;
+            outline: none;
+        }
+        .chatbot-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .chatbot-message.user {
+            background-color: #f59e0b; /* yellow-500 */
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        .chatbot-message.bot {
+            background-color: #e5e7eb; /* gray-200 */
+            color: #1f2937; /* gray-900 */
+            margin-right: auto;
+        }
     </style>
 </head>
 <body class="font-sans text-gray-800">
@@ -389,9 +466,32 @@
     <!-- Consent Banner -->
     <div id="consent-banner" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full text-center">
-            <p class="text-lg mb-4">We use cookies to improve your experience and for analytics.</p>
+            <p class="text-lg mb-4">We use cookies to improve your experience and for analytics. Do you consent to tracking?</p>
             <button onclick="grantConsent()" class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500 mr-4">Accept</button>
             <button onclick="denyConsent()" class="bg-gray-300 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-400">Decline</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <div class="chatbot-button" id="chatbotButton" title="Chat with us">
+            <i class="fas fa-comment fa-2x"></i>
+        </div>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <span>RoAdz Chatbot</span>
+                <button id="closeChatbot" class="text-white focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-body" id="chatbotBody">
+                <div class="chatbot-message bot">
+                    Hello! I’m here to help. Ask me anything about RoAdz!
+                </div>
+            </div>
+            <div class="chatbot-footer">
+                <input type="text" id="chatbotInput" class="chatbot-input" placeholder="Type your question..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            </div>
         </div>
     </div>
 
@@ -413,6 +513,78 @@
         function denyConsent() {
             localStorage.setItem('consent', 'denied');
             document.getElementById('consent-banner').classList.add('hidden');
+        }
+
+        // Chatbot Logic
+        const chatbotButton = document.getElementById('chatbotButton');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const closeChatbot = document.getElementById('closeChatbot');
+        const chatbotBody = document.getElementById('chatbotBody');
+        const chatbotInput = document.getElementById('chatbotInput');
+
+        // Toggle chatbot window
+        chatbotButton.addEventListener('click', () => {
+            chatbotWindow.style.display = chatbotWindow.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        closeChatbot.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+
+        // Chatbot responses
+        const responses = [
+            {
+                keywords: ['services', 'offer'],
+                answer: 'We offer Autorickshaw Advertising, Bus Advertising, and Custom Vehicle Ads.'
+            },
+            {
+                keywords: ['price', 'cost', 'pricing'],
+                answer: 'Our prices are: Autorickshaw Advertising at ₹150 per unit, Bus Advertising at ₹300 per unit, and Custom Vehicle Ads at ₹500 per unit.'
+            },
+            {
+                keywords: ['contact', 'reach', 'email', 'phone'],
+                answer: 'You can reach us at info@roadz.com, +91 123-456-7890, or visit us at 123 Ad Street, Prayagraj, India.'
+            },
+            {
+                keywords: ['where', 'based', 'location'],
+                answer: 'RoAdz is based in Prayagraj, India.'
+            }
+        ];
+
+        const defaultResponse = 'Sorry, I’m not sure how to answer that. Please contact us at info@roadz.com for more details!';
+
+        function sendMessage() {
+            const userMessage = chatbotInput.value.trim();
+            if (!userMessage) return;
+
+            // Display user message
+            const userMessageElement = document.createElement('div');
+            userMessageElement.className = 'chatbot-message user';
+            userMessageElement.textContent = userMessage;
+            chatbotBody.appendChild(userMessageElement);
+
+            // Find matching response
+            const userMessageLower = userMessage.toLowerCase();
+            let botResponse = defaultResponse;
+
+            for (const response of responses) {
+                if (response.keywords.some(keyword => userMessageLower.includes(keyword))) {
+                    botResponse = response.answer;
+                    break;
+                }
+            }
+
+            // Display bot response
+            const botMessageElement = document.createElement('div');
+            botMessageElement.className = 'chatbot-message bot';
+            botMessageElement.textContent = botResponse;
+            chatbotBody.appendChild(botMessageElement);
+
+            // Clear input
+            chatbotInput.value = '';
+
+            // Scroll to the bottom
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
         }
 
         // Smooth scrolling for navigation links
